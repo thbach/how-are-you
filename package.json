@@ -1,7 +1,7 @@
 {
-  "name": "simple-react-full-stack",
+  "name": "how-are-you",
   "version": "1.0.0",
-  "description": "Boilerplate to build a full stack web application using React, Node.js, Express and Webpack.",
+  "description": "..",
   "main": "src/server/index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -10,13 +10,28 @@
     "server": "nodemon src/server/index.js",
     "dev": "concurrently 'npm run server' 'npm run client'"
   },
-  "author": "Sandeep Raveesh",
-  "license": "ISC",
+  "author": "thbach",
   "dependencies": {
+    "dotenv": "^6.0.0",
+    "@material-ui/core": "^3.1.2",
+    "@material-ui/icons": "^3.0.1",
+    "@material-ui/lab": "^3.0.0-alpha.18",
+    "axios": "^0.18.0",
     "express": "^4.16.3",
+    "prop-types": "^15.6.2",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "react-redux": "^5.0.7",
+    "react-scripts": "2.0.4",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0"
   },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
@@ -29,12 +44,15 @@
     "css-loader": "^1.0.0",
     "eslint": "^5.0.0",
     "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-prettier": "^3.0.1",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.7.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "nodemon": "^1.17.3",
+    "prettier": "^1.14.2",
     "style-loader": "^0.23.0",
     "url-loader": "^1.0.1",
     "webpack": "^4.5.0",
