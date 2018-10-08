@@ -16,6 +16,7 @@ app.get('/api/getWeather', async (req, res) => {
     if (process.env.NODE_ENV === 'production') {
       url = `https://api.darksky.net/forecast/${DARKSKY_APIKEY}/${req.query.q}?units=auto`;
     }
+    url = `https://api.darksky.net/forecast/${DARKSKY_APIKEY}/${req.query.q}?units=auto`;
     const response = await axios.get(url);
     res.send(response.data);
   } catch (e) {
@@ -29,6 +30,7 @@ app.get('/api/getCity', async (req, res) => {
     if (process.env.NODE_ENV === 'production') {
       url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.query.q}&key=${GOOGLE_GEOCODING_APIKEY}`;
     }
+    url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.query.q}&key=${GOOGLE_GEOCODING_APIKEY}`;
     const response = await axios.get(url);
     res.send(response.data);
   } catch (e) {

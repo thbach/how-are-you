@@ -34,6 +34,7 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: theme.spacing.unit,
   },
   chips: {
     display: 'flex',
