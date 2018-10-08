@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import {connect} from 'react-redux';
 import EmotionCard from '../../components/Card/EmotionCard';
 import LocationCard from '../../components/Card/LocationCard';
@@ -10,15 +9,6 @@ class TrackMood extends Component {
   componentDidMount() {
     console.log('[TrackMood], mounted');
     this.props.onGetLocation();
-
-    axios
-      .get('/api/getWeather')
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
   }
 
   changedHandler = (event, name, value) => {
@@ -47,7 +37,7 @@ class TrackMood extends Component {
             onClick={this.clickedHandler}
           />
         ))}
-        <LocationCard />
+        <LocationCard location={this.props.location} weather={this.props.weather} />
         <SendButton />
       </div>
     );
@@ -56,6 +46,8 @@ class TrackMood extends Component {
 
 const mapStateToProps = state => ({
   emotions: state.trackMood.emotions,
+  location: state.trackMood.location,
+  weather: state.trackMood.weather,
 });
 
 const mapDispatchToProps = dispatch => ({

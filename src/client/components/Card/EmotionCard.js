@@ -31,16 +31,14 @@ const styles = theme => ({
     fontSize: 14,
   },
   slider: {
-    width: '250px',
-    marginRight: theme.spacing.unit * 5,
-    marginLeft: theme.spacing.unit * 3,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   chips: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
   },
 });
 

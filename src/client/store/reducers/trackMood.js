@@ -6,9 +6,12 @@ const initialState = {
     lat: null,
     long: null,
     city: null,
+    success: false,
   },
   weather: {
-    temp: null,
+    currently: null,
+    timezone: null,
+    success: false,
   },
   emotions: {
     mood: {
@@ -118,13 +121,23 @@ const adjustEmotionValue = (state, action) => {
 };
 
 const setLocation = (state, action) => {
-  const updatedLocation = {lat: action.location.lat, long: action.location.long, city: action.city};
+  const updatedLocation = {lat: action.location.lat, long: action.location.long, city: action.city, success: true};
   return updateObject(state, {location: updatedLocation});
 };
 
 const setLocationFailed = state => {
-  console.log('get location failed');
-  return state;
+  const updatedLocation = updateObject(state.location, {success: false});
+  return updateObject(state, {location: updatedLocation});
+};
+
+const setWeather = (state, action) => {
+  const updatedWeather = {currently: action.weather.currently, timezone: action.weather.timezone, success: true};
+  return updateObject(state, {weather: updatedWeather});
+};
+
+const setWeatherFailed = state => {
+  const updatedWeather = updateObject(state.weather, {success: false});
+  return updateObject(state, {weather: updatedWeather});
 };
 
 const reducer = (state = initialState, action) => {
@@ -135,6 +148,10 @@ const reducer = (state = initialState, action) => {
       return setLocation(state, action);
     case actionTypes.SET_LOCATION_FAILED:
       return setLocationFailed(state, action);
+    case actionTypes.SET_WEATHER:
+      return setWeather(state, action);
+    case actionTypes.SET_WEATHER_FAILED:
+      return setWeatherFailed(state, action);
     default:
       return state;
   }

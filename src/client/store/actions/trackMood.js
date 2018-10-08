@@ -1,8 +1,6 @@
 import axios from 'axios';
 import * as actionTypes from './actionTypes';
 
-// const apk = 'ab38c1a242f335019d0bd557247f1cb55a';
-
 export const change = (emotion, value) => ({
   type: actionTypes.ADJUST_EMOTION_VALUE,
   emotion,
@@ -15,11 +13,9 @@ export const getLocation = () => dispatch => {
   } else {
     navigator.geolocation.getCurrentPosition(
       pos => {
-        const lat = pos.coords.latitude;
-        const long = pos.coords.longitude;
-
-        // add axios
-        dispatch(setLocation({lat, long}));
+        const loc = {lat: pos.coords.latitude, long: pos.coords.longitude};
+        getCity(dispatch, loc);
+        getWeather(dispatch, loc);
       },
       () => {
         dispatch(setLocationFailed());
@@ -28,15 +24,45 @@ export const getLocation = () => dispatch => {
   }
 };
 
-const setLocation = location => {
-  const city = 'vancouver';
-  return {
-    type: actionTypes.SET_LOCATION,
-    location,
-    city,
-  };
+const getWeather = (dispatch, loc) => {
+  const url = `/api/getWeather?q=${loc.lat},${loc.long}`;
+  axios
+    .get(url)
+    .then(res => {
+      dispatch(setWeather(res.data));
+    })
+    .catch(() => {
+      dispatch(setWeatherFailed());
+    });
 };
+
+const getCity = (dispatch, loc) => {
+  const url = `/api/getCity?q=${loc.lat},${loc.long}`;
+  axios
+    .get(url)
+    .then(res => {
+      dispatch(setLocation(loc, res.data.results[4].formatted_address));
+    })
+    .catch(() => {
+      dispatch(setLocationFailed());
+    });
+};
+
+const setLocation = (location, city) => ({
+  type: actionTypes.SET_LOCATION,
+  location,
+  city,
+});
 
 const setLocationFailed = () => ({
   type: actionTypes.SET_LOCATION_FAILED,
+});
+
+const setWeather = weather => ({
+  type: actionTypes.SET_WEATHER,
+  weather,
+});
+
+const setWeatherFailed = () => ({
+  type: actionTypes.SET_WEATHER_FAILED,
 });

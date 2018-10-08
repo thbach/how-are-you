@@ -32,12 +32,20 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 200,
+    width: 250,
   },
 });
 
 const locationCard = props => {
   const {classes} = props;
+  let locationValue = 'Unknown';
+  if (props.location.success) {
+    locationValue = props.location.city;
+  }
+  let weather = '';
+  if (props.weather.success) {
+    weather = `It is currently ${props.weather.currently.apparentTemperature} degrees`;
+  }
 
   return (
     <main className={classes.layout}>
@@ -47,14 +55,14 @@ const locationCard = props => {
             <TextField
               id="standard-uncontrolled"
               label="Location"
-              defaultValue="Getting Location..."
+              value={locationValue}
               className={classes.textField}
               margin="normal"
             />
           </div>
         </form>
         <Typography color="textSecondary" className={classes.title}>
-          It is currently ... degrees
+          {weather}
         </Typography>
         <ClickableChip label="get location" />
       </Paper>
