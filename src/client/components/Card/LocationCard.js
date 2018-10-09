@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -36,42 +36,57 @@ const styles = theme => ({
   },
 });
 
-const locationCard = props => {
-  const {classes} = props;
-  let locationValue = 'Unknown';
-  if (props.location.success) {
-    locationValue = props.location.city;
-  }
-  let weather = '';
-  if (props.weather.success) {
-    weather = `It is currently ${props.weather.currently.apparentTemperature} degrees`;
+class LocationCard extends Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
   }
 
-  return (
-    <main className={classes.layout}>
-      <Paper className={classes.paper}>
-        <form>
+  onSubmit = e => {
+    e.preventDefault(e);
+    this.myRef.current.blur();
+  };
+
+  render() {
+    const {classes} = this.props;
+
+    let weather = '';
+    if (this.props.weather.success) {
+      weather = `It is currently ${this.props.weather.currently.apparentTemperature} degrees`;
+    }
+
+    return (
+      <main className={classes.layout}>
+        <Paper className={classes.paper}>
           <div>
-            <TextField
-              id="standard-uncontrolled"
-              label="Location"
-              value={locationValue}
-              className={classes.textField}
-              margin="normal"
-            />
+            <form onSubmit={e => this.onSubmit(e)}>
+              <TextField
+                inputRef={this.myRef}
+                id="standard-uncontrolled"
+                label="Location"
+                value={this.props.value}
+                className={classes.textField}
+                margin="normal"
+                onChange={this.props.onChanged}
+                onFocus={this.props.onFocus}
+                onBlur={this.props.onBlur}
+              />
+            </form>
           </div>
-        </form>
-        <Typography color="textSecondary" className={classes.title}>
-          {weather}
-        </Typography>
-        <ClickableChip label="get location" />
-      </Paper>
-    </main>
-  );
-};
+          <Typography color="textSecondary" className={classes.title}>
+            {weather}
+          </Typography>
+          <div id="updateWeather">
+            <ClickableChip label="update weather" />
+          </div>
+        </Paper>
+      </main>
+    );
+  }
+}
 
-locationCard.propTypes = {
+LocationCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(locationCard);
+export default withStyles(styles)(LocationCard);

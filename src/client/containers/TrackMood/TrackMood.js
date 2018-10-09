@@ -11,12 +11,10 @@ class TrackMood extends Component {
     this.props.onGetLocation();
   }
 
-  changedHandler = (event, name, value) => {
-    this.props.onChange(name, value);
-  };
-
-  clickedHandler = (name, value) => {
-    this.props.onChange(name, value);
+  onBlur = () => {
+    // get lat long by city name
+    // get weather by lat long
+    console.log('focused out');
   };
 
   render() {
@@ -33,11 +31,16 @@ class TrackMood extends Component {
             question={this.props.emotions[emo].question}
             descriptions={this.props.emotions[emo].descriptions}
             emotionType={emo}
-            onChange={this.changedHandler}
-            onClick={this.clickedHandler}
+            onChange={(emotion, value) => this.props.onChange(emotion, value)}
           />
         ))}
-        <LocationCard location={this.props.location} weather={this.props.weather} />
+        <LocationCard
+          value={this.props.location.city !== null ? this.props.location.city : 'Unknown'}
+          weather={this.props.weather}
+          onChanged={event => this.props.onLocationInputChange(event.target.value)}
+          onFocus={() => this.props.onLocationInputChange('')}
+          onBlur={() => this.onBlur()}
+        />
         <SendButton />
       </div>
     );
@@ -52,6 +55,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onChange: (emotion, value) => dispatch(actions.change(emotion, value)),
+  onLocationInputChange: value => dispatch(actions.locationInputChange(value)),
   onGetLocation: () => dispatch(actions.getLocation()),
 });
 

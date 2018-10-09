@@ -120,6 +120,11 @@ const adjustEmotionValue = (state, action) => {
   return updateObject(state, {emotions: updatedEmotions});
 };
 
+const locationInputChange = (state, action) => {
+  const updatedCity = updateObject(state.location, {city: action.value});
+  return updateObject(state, {location: updatedCity});
+};
+
 const setLocation = (state, action) => {
   const updatedLocation = {lat: action.location.lat, long: action.location.long, city: action.city, success: true};
   return updateObject(state, {location: updatedLocation});
@@ -144,6 +149,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ADJUST_EMOTION_VALUE:
       return adjustEmotionValue(state, action);
+    case actionTypes.LOCATION_INPUT_CHANGE:
+      return locationInputChange(state, action);
     case actionTypes.SET_LOCATION:
       return setLocation(state, action);
     case actionTypes.SET_LOCATION_FAILED:

@@ -59,12 +59,12 @@ const emotionCard = props => {
               min={props.min}
               max={props.max}
               value={props.value}
-              onChange={(event, value) => props.onChange(event, props.emotionType, value)}
+              onChange={(event, value) => props.onChange(props.emotionType, value)}
             />
           </div>
           <div className={classes.chips}>
             {props.descriptions.map((des, i) => (
-              <ClickableChip key={i} label={des.text} onClick={() => props.onClick(props.emotionType, des.value)} />
+              <ClickableChip key={i} label={des.text} onClick={() => props.onChange(props.emotionType, des.value)} />
             ))}
           </div>
         </form>

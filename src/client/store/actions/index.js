@@ -1,1 +1,1 @@
-export {getLocation, change} from './trackMood';
+export {getLocation, locationInputChange, change} from './trackMood';

@@ -7,6 +7,11 @@ export const change = (emotion, value) => ({
   value,
 });
 
+export const locationInputChange = value => ({
+  type: actionTypes.LOCATION_INPUT_CHANGE,
+  value,
+});
+
 export const getLocation = () => dispatch => {
   if (!navigator.geolocation) {
     dispatch(setLocationFailed());
@@ -14,7 +19,7 @@ export const getLocation = () => dispatch => {
     navigator.geolocation.getCurrentPosition(
       pos => {
         const loc = {lat: pos.coords.latitude, long: pos.coords.longitude};
-        getCity(dispatch, loc);
+        getCityWithLatLong(dispatch, loc);
         getWeather(dispatch, loc);
       },
       () => {
@@ -36,8 +41,8 @@ const getWeather = (dispatch, loc) => {
     });
 };
 
-const getCity = (dispatch, loc) => {
-  const url = `/api/getCity?q=${loc.lat},${loc.long}`;
+const getCityWithLatLong = (dispatch, loc) => {
+  const url = `/api/getCityWithLatLong?q=${loc.lat},${loc.long}`;
   axios
     .get(url)
     .then(res => {
