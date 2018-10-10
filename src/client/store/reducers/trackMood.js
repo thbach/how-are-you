@@ -4,7 +4,7 @@ import {updateObject} from '../../shared/utility';
 const initialState = {
   location: {
     lat: null,
-    long: null,
+    lng: null,
     city: null,
     success: false,
   },
@@ -125,8 +125,18 @@ const locationInputChange = (state, action) => {
   return updateObject(state, {location: updatedCity});
 };
 
-const setLocation = (state, action) => {
-  const updatedLocation = {lat: action.location.lat, long: action.location.long, city: action.city, success: true};
+const setLatLng = (state, action) => {
+  const updatedLocation = {
+    lat: action.latlng.lat,
+    lng: action.latlng.lng,
+    city: state.location.city,
+    success: true,
+  };
+  return updateObject(state, {location: updatedLocation});
+};
+
+const setCity = (state, action) => {
+  const updatedLocation = {lat: state.location.lat, lng: state.location.lng, city: action.city, success: true};
   return updateObject(state, {location: updatedLocation});
 };
 
@@ -151,8 +161,10 @@ const reducer = (state = initialState, action) => {
       return adjustEmotionValue(state, action);
     case actionTypes.LOCATION_INPUT_CHANGE:
       return locationInputChange(state, action);
-    case actionTypes.SET_LOCATION:
-      return setLocation(state, action);
+    case actionTypes.SET_LATLNG:
+      return setLatLng(state, action);
+    case actionTypes.SET_CITY:
+      return setCity(state, action);
     case actionTypes.SET_LOCATION_FAILED:
       return setLocationFailed(state, action);
     case actionTypes.SET_WEATHER:

@@ -18,7 +18,8 @@ export const getLocation = () => dispatch => {
   } else {
     navigator.geolocation.getCurrentPosition(
       pos => {
-        const loc = {lat: pos.coords.latitude, long: pos.coords.longitude};
+        const loc = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+        dispatch(setLatLng(loc));
         getCityWithLatLong(dispatch, loc);
         getWeather(dispatch, loc);
       },
@@ -29,8 +30,23 @@ export const getLocation = () => dispatch => {
   }
 };
 
+export const getLocationFromString = locString => dispatch => {
+  const url = `/api/getLatLngFromString?q=${locString}`;
+  axios
+    .get(url)
+    .then(res => {
+      const cityName = formatCityName(res.data[0].address_components);
+      dispatch(setCity(cityName));
+      dispatch(setLatLng(res.data[0].geometry.location));
+      getWeather(dispatch, res.data[0].geometry.location);
+    })
+    .catch(() => {
+      dispatch(setLocationFailed());
+    });
+};
+
 const getWeather = (dispatch, loc) => {
-  const url = `/api/getWeather?q=${loc.lat},${loc.long}`;
+  const url = `/api/getWeather?q=${loc.lat},${loc.lng}`;
   axios
     .get(url)
     .then(res => {
@@ -42,20 +58,25 @@ const getWeather = (dispatch, loc) => {
 };
 
 const getCityWithLatLong = (dispatch, loc) => {
-  const url = `/api/getCityWithLatLong?q=${loc.lat},${loc.long}`;
+  const url = `/api/getCityWithLatLng?q=${loc.lat},${loc.lng}`;
   axios
     .get(url)
     .then(res => {
-      dispatch(setLocation(loc, res.data.results[4].formatted_address));
+      const cityName = formatCityName(res.data[0].address_components);
+      dispatch(setCity(cityName));
     })
     .catch(() => {
       dispatch(setLocationFailed());
     });
 };
 
-const setLocation = (location, city) => ({
-  type: actionTypes.SET_LOCATION,
-  location,
+const setLatLng = latlng => ({
+  type: actionTypes.SET_LATLNG,
+  latlng,
+});
+
+const setCity = city => ({
+  type: actionTypes.SET_CITY,
   city,
 });
 
@@ -71,3 +92,14 @@ const setWeather = weather => ({
 const setWeatherFailed = () => ({
   type: actionTypes.SET_WEATHER_FAILED,
 });
+
+// UTILITY FUNCTIONS
+const formatCityName = addCmpts => {
+  const address = [];
+  addCmpts.forEach(cmpt => {
+    if (cmpt.types.includes('locality') || cmpt.types.includes('country')) {
+      address.push(cmpt.long_name);
+    }
+  });
+  return address.join(' ');
+};

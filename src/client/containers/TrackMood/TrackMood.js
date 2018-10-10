@@ -12,9 +12,12 @@ class TrackMood extends Component {
   }
 
   onBlur = () => {
-    // get lat long by city name
-    // get weather by lat long
-    console.log('focused out');
+    console.log('focused out', this.props.location.city);
+    if (this.props.location.city !== null) {
+      // get weather by lat lng
+      // update info text
+      this.props.onGetLocationFromString(this.props.location.city);
+    }
   };
 
   render() {
@@ -39,7 +42,7 @@ class TrackMood extends Component {
           weather={this.props.weather}
           onChanged={event => this.props.onLocationInputChange(event.target.value)}
           onFocus={() => this.props.onLocationInputChange('')}
-          onBlur={() => this.onBlur()}
+          onBlur={value => this.onBlur(value)}
         />
         <SendButton />
       </div>
@@ -57,6 +60,7 @@ const mapDispatchToProps = dispatch => ({
   onChange: (emotion, value) => dispatch(actions.change(emotion, value)),
   onLocationInputChange: value => dispatch(actions.locationInputChange(value)),
   onGetLocation: () => dispatch(actions.getLocation()),
+  onGetLocationFromString: locString => dispatch(actions.getLocationFromString(locString)),
 });
 
 export default connect(
